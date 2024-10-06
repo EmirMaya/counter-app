@@ -13,44 +13,71 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Counter Functions'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.refresh_rounded), // PARA REFRESCAR LA
+        appBar: AppBar(
+            centerTitle: true,
+            title: const Text('Counter Functions'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.refresh_rounded), // PARA REFRESCAR LA
+                onPressed: () {
+                  setState(() {
+                    clickCounter = 0;
+                  });
+                },
+              ),
+            ]),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '$clickCounter',
+                style:
+                    const TextStyle(fontSize: 160, fontWeight: FontWeight.w100),
+              ),
+              Text('Click${clickCounter == 1 ? '' : 's'}',
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.bold))
+              // (clickCounter != 1  ? const Text('Clicks', style: TextStyle( fontSize: 25)) : const Text('Click', style: TextStyle( fontSize: 25)))
+            ],
+          ),
+        ),
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              shape: const StadiumBorder(),
               onPressed: () {
                 setState(() {
-                  clickCounter = 0;
+                  // set state es para que renderice en la pantalla los nuevos valores
+                  clickCounter++;
                 });
               },
+              child: const Icon(Icons.refresh_outlined),
             ),
-          ]),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '$clickCounter',
-              style:
-                  const TextStyle(fontSize: 160, fontWeight: FontWeight.w100),
+            const SizedBox(height: 15),
+            FloatingActionButton(
+              shape: const StadiumBorder(),
+              onPressed: () {
+                setState(() {
+                  // set state es para que renderice en la pantalla los nuevos valores
+                  clickCounter++;
+                });
+              },
+              child: const Icon(Icons.plus_one),
             ),
-            Text('Click${clickCounter == 1 ? '' : 's'}',
-                style:
-                    const TextStyle(fontSize: 25, fontWeight: FontWeight.bold))
-            // (clickCounter != 1  ? const Text('Clicks', style: TextStyle( fontSize: 25)) : const Text('Click', style: TextStyle( fontSize: 25)))
+            const SizedBox(height: 15),
+            FloatingActionButton(
+              shape: const StadiumBorder(),
+              onPressed: () {
+                setState(() {
+                  // set state es para que renderice en la pantalla los nuevos valores
+                  clickCounter--;
+                });
+              },
+              child: const Icon(Icons.exposure_minus_1_outlined),
+            ),
           ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            // set state es para que renderice en la pantalla los nuevos valores
-            clickCounter++;
-          });
-        },
-        child: const Icon(Icons.plus_one),
-      ),
-    );
+        ));
   }
 }
