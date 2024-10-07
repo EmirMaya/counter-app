@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vibration/vibration.dart';
 
 class CounterFunctionsScreen extends StatefulWidget {
   const CounterFunctionsScreen({super.key});
@@ -45,39 +46,72 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
         floatingActionButton: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            FloatingActionButton(
-              shape: const StadiumBorder(),
+            CustomButton(
+              icon: Icons.refresh_outlined,
+              vibrationDuration: 300,
               onPressed: () {
                 setState(() {
-                  // set state es para que renderice en la pantalla los nuevos valores
+                  clickCounter = 0;
+                });
+              },
+            ),
+            const SizedBox(height: 15),
+            CustomButton(
+              icon: Icons.plus_one,
+              vibrationDuration: 70,
+              onPressed: () {
+                setState(() {
                   clickCounter++;
                 });
               },
-              child: const Icon(Icons.refresh_outlined),
             ),
             const SizedBox(height: 15),
-            FloatingActionButton(
-              shape: const StadiumBorder(),
+            CustomButton(
+              icon: Icons.exposure_minus_1_outlined,
+              vibrationDuration: 70,
               onPressed: () {
+                if (clickCounter == 0) return;
                 setState(() {
-                  // set state es para que renderice en la pantalla los nuevos valores
-                  clickCounter++;
-                });
-              },
-              child: const Icon(Icons.plus_one),
-            ),
-            const SizedBox(height: 15),
-            FloatingActionButton(
-              shape: const StadiumBorder(),
-              onPressed: () {
-                setState(() {
-                  // set state es para que renderice en la pantalla los nuevos valores
                   clickCounter--;
                 });
               },
-              child: const Icon(Icons.exposure_minus_1_outlined),
             ),
           ],
         ));
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onPressed;
+  final int vibrationDuration;
+
+  const CustomButton({
+    super.key,
+    required this.icon,
+    this.onPressed, required this.vibrationDuration,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      enableFeedback: true,
+      backgroundColor: const Color.fromARGB(255, 175, 255, 234),
+      elevation: 10.0,
+      shape: const StadiumBorder(),
+      onPressed: () async {
+       Vibration.hasVibrator().then((hasVibrator) {
+          if (hasVibrator ?? false) {
+            Vibration.vibrate(duration: vibrationDuration);
+          }
+        });
+
+        // Llama al callback de `onPressed`, si está definido
+        if (onPressed != null) {
+          onPressed!();
+        }
+      },
+      child: Icon(icon),
+    );
   }
 }
